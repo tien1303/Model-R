@@ -1,0 +1,109 @@
+#TABLE 1: Descriptive statistics 
+#Filter data
+male_blue <- All[All$male == 1 & All$jobcode == 1,]
+male_white <- All[All$male == 1 & All$jobcode == 0,]
+female_blue <- All[All$male == 0 & All$jobcode == 1,]
+female_white <- All[All$male == 0 & All$jobcode == 0,]
+male <- All[All$male == 1, ]
+female <- All[All$male == 0, ]
+blue <- All[All$jobcode == 1, ]
+white <- All[All$jobcode == 0, ]
+
+All$ASVAB <- All$ASVAB / 1000
+All$wagealt <- All$wagealt / 100
+
+save(female, file = "female.RData")
+save(male, file = "male.RData")
+save(male_blue, file = "male_blue.RData")
+save(male_white, file = "male_white.RData")
+save(female_blue, file = "female_blue.RData")
+save(female_white, file = "female_white.RData")
+save(male_blue, file = "male_blue.RData")
+save(blue, file = "blue.RData")
+save(white, file = "white.RData")
+save(All, file = "All_divided.RData")
+
+#Fill in TABLE 1
+summary(All)
+summary(male)
+summary(female)
+summary(blue)
+summary(white)
+summary(male_blue)
+summary(female_blue)
+summary(male_white)
+summary(female_white)
+
+sd(All$wagealt)
+sd(All$hdegree)
+sd(All$ASVAB)
+sd(All$tenure2017)
+sd(All$region1997)
+sd(All$urban2017)
+
+sd(male$wagealt)
+sd(male$hdegree)
+sd(male$ASVAB)
+sd(male$tenure2017)
+sd(male$region1997)
+sd(male$urban2017)
+
+sd(female$wagealt)
+sd(female$hdegree)
+sd(female$ASVAB)
+sd(female$tenure2017)
+sd(female$region1997)
+sd(female$urban2017)
+
+sd(blue$wagealt)
+sd(blue$hdegree)
+sd(blue$ASVAB)
+sd(blue$tenure2017)
+sd(blue$region1997)
+sd(blue$urban2017)
+
+sd(white$wagealt)
+sd(white$hdegree)
+sd(white$ASVAB)
+sd(white$tenure2017)
+sd(white$region1997)
+sd(white$urban2017)
+
+sd(male_blue$wagealt)
+sd(male_blue$hdegree)
+sd(male_blue$ASVAB)
+sd(male_blue$tenure2017)
+sd(male_blue$region1997)
+sd(male_blue$urban2017)
+
+sd(female_blue$wagealt)
+sd(female_blue$hdegree)
+sd(female_blue$ASVAB)
+sd(female_blue$tenure2017)
+sd(female_blue$region1997)
+sd(female_blue$urban2017)
+
+sd(female_white$wagealt)
+sd(female_white$hdegree)
+sd(female_white$ASVAB)
+sd(female_white$tenure2017)
+sd(female_white$region1997)
+sd(female_white$urban2017)
+
+#REGRESSION
+rm(list = ls())
+attach(All)
+#MODEL 1
+l_earnings = log(wagealt)
+reg1 <- lm(l_earnings ~ 1 + hdegree + ASVAB + tenure2017 + jobcode + region1997 + urban2017)
+summary(reg1)
+
+#MODEL 2
+l_earnings = log(wagealt)
+reg2 <- lm(l_earnings ~ 1 + hdegree + ASVAB + tenure2017 + jobcode + region1997 + urban2017 + male)
+summary(reg2)
+
+#MODEL 3
+l_earnings = log(wagealt)
+reg3 <- lm(l_earnings ~ 1 + hdegree + ASVAB + tenure2017 + jobcode + region1997 + urban2017 + male + male*jobcode)
+summary(reg3)
