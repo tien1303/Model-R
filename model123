@@ -1,3 +1,51 @@
+#DATA CLEANING
+#Eliminate missing data
+All <- nlsy97[
+  nlsy97$wagealt > 0 &
+  nlsy97$hdegree >= 0 &
+  nlsy97$ASVAB >= 0 &
+  nlsy97$tenure2017 >= 0 &
+  nlsy97$region1997 >= 0 &
+  nlsy97$urban2017 >= 0 & nlsy97$urban2017 <= 1 &
+  nlsy97$jobcode >= 0,
+]
+#Choosing variables
+All <- All[, c("wagealt", "hdegree", "ASVAB", "tenure2017",
+               "jobcode", "region1997", "urban2017", "male")]
+#Eliminate mixed data
+All <- All[
+  !(All$jobcode >= 2600 & All$jobcode <= 2760) & 
+  !(All$jobcode >= 4700 & All$jobcode <= 4960) &  
+  !(All$jobcode >= 4300 & All$jobcode <= 4430) & 
+  !(All$jobcode == 4460) &                       
+  !(All$jobcode >= 9800 & All$jobcode <= 9840) & 
+  !(All$jobcode >= 9950 & All$jobcode <= 9990), 
+]
+library(dplyr)
+blue_ranges <- c(
+  3700:3950, 4000:4160, 4200:4250, 4500:4650,
+  6000:6130, 6200:6940, 7000:7620, 7700:7750,
+  7800:7850, 7900:8960, 9000:9750
+)
+white_ranges <- c(
+  10:430, 500:950, 1000:1240, 1300:1530, 1540:1560,
+  1600:1760, 1800:1860, 1900:1960, 2000:2060,
+  2100:2150, 2200:2340, 2400:2550, 2800:2960,
+  3000:3260, 3300:3650, 5000:5930
+)
+#Make jobcode dummies
+All <- All %>%
+  mutate(jobcode = case_when(
+    jobcode %in% blue_ranges ~ 1,
+    jobcode %in% white_ranges ~ 0,
+  ))
+#Make region1997 dummies
+All <- All %>%
+  mutate(region1997 = case_when(
+    region1997 %in% c(1, 4) ~ 0,
+    region1997 %in% c(2, 3) ~ 1,
+  ))
+
 #TABLE 1: Descriptive statistics 
 #Filter data
 male_blue <- All[All$male == 1 & All$jobcode == 1,]
